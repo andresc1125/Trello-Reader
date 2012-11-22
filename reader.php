@@ -1,4 +1,3 @@
-
 <?php
 
 
@@ -17,10 +16,9 @@ $tags = array_keys($_GET);
 $boards=array();
 $cards =array();
 
-for($i=0;$i<$numero;$i++){
-$$tags[$i]=$valores[$i];
-$boards[]=$$tags[$i];
-}
+
+$boards=$_GET['board'];
+
 
 function getBoardName($id,$key,$token){
 	$req2='https://api.trello.com/1/board/'.$id.'?key='.$key.'&token='.$token;
@@ -107,7 +105,7 @@ function userName($idUser,$key,$token)
 	return $getUser['fullName'];
 	}
 
-
+if(sizeof($boards)>0){
 	foreach($boards as $board)
 		
 		{
@@ -127,7 +125,7 @@ function userName($idUser,$key,$token)
 		
 		}
 	
-	
+}
 
 ?> 
 
@@ -137,7 +135,7 @@ function userName($idUser,$key,$token)
 </head>
 
 <body>
-	<h1>Trello Reader</h1>
+	<h1>Trello Reader </h1>
 	<div id="consult">
 
 
@@ -149,13 +147,14 @@ function userName($idUser,$key,$token)
 	
 	<form  method="get">
 	<?php 
-	$boards = getBoards($Key,$token);
+	$boardsD = getBoards($Key,$token);
+	
 	
 	
 	$count=0;
 	
-	foreach($boards as $item){
-		echo '<input type="checkbox" name="board'.$count.'" value="'.$item['id'] .'" />'.$item['name'].'<br/>';
+	foreach($boardsD as $item){
+		echo '<input type="checkbox" name="board[]" value="'.$item['id'] .'" />'.$item['name'].'<br/>';
 		$count++;
 		}
 	unset($count);

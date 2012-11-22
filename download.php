@@ -1,4 +1,3 @@
-
 <?php
 
 unlink("reader.csv");
@@ -19,10 +18,9 @@ $tags = array_keys($_GET);
 $boards=array();
 $cards =array();
 
-for($i=0;$i<$numero;$i++){
-$$tags[$i]=$valores[$i];
-$boards[]=$$tags[$i];
-}
+
+$boards=$_GET['board'];
+
 
 function getBoardName($id,$key,$token){
 	$req2='https://api.trello.com/1/board/'.$id.'?key='.$key.'&token='.$token;
@@ -139,26 +137,26 @@ foreach($cards as $card)
 
 {
 	
-	
 	$asigned='';
 	
 	foreach ($card['idMembers'] as $idmember)
 	{
 	
-	$asigned = $asigned.userName($idmember,$Key);
+	$asigned = $asigned.userName($idmember,$Key,$token);
 	
 	}
 	
 	$points=substr($card['name'],1,1);
 	$list=listName($card['idList'],$Key,$token);
 	
-	$field=array($card['idBoard'],$card['name'],$card['desc'],$points,listName($card['idList'],$Key,$token),$card['badges']['checkItems'],$card['badges']['checkItemsChecked'],$asigned);
-	 
-	 
-	 
-	fputcsv($fp, $field);
+	$output = preg_replace('/\t{1,}/', ' ', $card['desc']);
+	$output = preg_replace('/\n{1,}/', ' ', $output);
+	$output = preg_replace('/\r{1,}/', ' ', $output);
+	$output = preg_replace('/\s{1,}/', ' ', $output);
 	
-	
+   $field=array($card['idBoard'],$card['name'],$output,$points,$list,$card['badges']['checkItems'],$card['badges']['checkItemsChecked'],$asigned);
+	fputcsv($fp,$field);
+
 
 }
 
@@ -175,7 +173,7 @@ header ("Content-Length: ".filesize("reader.csv"));
 readfile("reader.csv");
 
 
-echo "lalla";
+
 
 
 
