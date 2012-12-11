@@ -34,6 +34,8 @@ include(__DIR__.'/init.inc.php');
           echo '<td>';echo "Status";echo'</td>';
           echo '<td>';echo "CheckItems";echo'</td>';
           echo '<td>';echo "ItemsChecked";echo'</td>';
+          echo '<td>';echo "ItemsChecked";echo'</td>';
+          echo '<td>';echo "unCheckedItems";echo'</td>';
           echo '<td>';echo "Asigned users";echo'</td>';
           echo '</tr>';
           foreach($cards as $card) {
@@ -45,6 +47,8 @@ include(__DIR__.'/init.inc.php');
               echo '<td>';echo listName($card['idList'],$Key,$token);echo'</td>';
               echo '<td>';echo $card['badges']['checkItems'];echo'</td>';
               echo '<td>';echo $card['badges']['checkItemsChecked'];echo'</td>';
+              echo '<td>';echo getItemsChecked($card['id'],$Key,$token);echo'</td>';
+              echo '<td>';echo getItemsUnChecked($card['id'],$Key,$token);echo'</td>';
               echo '<td>';
               foreach ($card['idMembers'] as $idmember) {
                   echo userName($idmember,$Key,$token).',';
@@ -53,6 +57,8 @@ include(__DIR__.'/init.inc.php');
           }
           echo '</tr>';
           echo '</table>';
+          
+          
       ?>
     </div>
   </body>

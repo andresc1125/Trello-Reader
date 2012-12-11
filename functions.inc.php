@@ -29,6 +29,63 @@ function userName($idUser,$key,$token) {
     return $getUser['fullName'];
 }
 
+function getCheckItemsPerCard($idCard,$key,$token){
+    $url='https://api.trello.com/1/card/'.$idCard.'/checklists?key='.$key.'&token='.$token;
+    $getCheckItems = api_request($url);
+    return $getCheckItems;
+}
+
+function getCheckItemsState($idCard,$key,$token){
+    $url='https://api.trello.com/1/card/'.$idCard.'?key='.$key.'&token='.$token;
+    $checkItemStates=api_request($url);
+    return $checkItemStates['checkItemStates'];
+}
+
+function getItemsChecked($idCard,$key,$token)
+{
+  $items = getCheckItemsPerCard($idCard,$key,$token);
+  $itemsOk='';
+  $CheckItemsState=getCheckItemsState($idCard,$key,$token);
+  foreach($items[0]['checkItems'] as $item)
+  {
+    foreach ($CheckItemsState as $CheckItemState)
+    {
+        if($item['id']==$CheckItemState['idCheckItem'])
+        {
+          $itemsOk=$itemsOk.$item['name'].',';
+        }
+    }
+  }
+  return $itemsOk;
+}
+
+function getItemsUnChecked($idCard,$key,$token){
+  $items = getCheckItemsPerCard($idCard,$key,$token);
+  $itemsOk='';
+  $CheckItemsState=getCheckItemsState($idCard,$key,$token);
+  foreach($items[0]['checkItems'] as $item)
+  {
+    if(!isChecked($item,$CheckItemsState))
+    {
+      $itemsOk=$itemsOk.$item['name'].',';
+    }
+  }
+  return $itemsOk;
+}
+
+function isChecked($item,$CheckItemsState){
+  $val=FALSE;
+  foreach ($CheckItemsState as $CheckItemState)
+    {
+        if($item['id']==$CheckItemState['idCheckItem'])
+        {
+          $val=TRUE;
+        }
+    }
+  return $val;
+}
+
+
 function api_request($url) {
     $call = curl_init($url);
     curl_setopt($call,CURLOPT_RETURNTRANSFER, TRUE);
