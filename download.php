@@ -4,7 +4,7 @@ include(__DIR__.'/init.inc.php');
 unlink("reader.csv"); //FIXME: Don't use filesystem
 
 $fp = fopen('reader.csv', 'w+');
-fputcsv($fp, array("Board", " Card name", "Card Description", "Card Points" , "Status","CheckItems", "ItemsChecked","Asigned users"));
+fputcsv($fp, array("Board", " Card name", "Card Description", "Card Points", "Status", "Checked Items Count", "UnChecked Items Count", "Checked Items", "UnChecked Items", "Asigned users"));
 foreach($cards as $card) {
     $asigned='';
     foreach ($card['idMembers'] as $idmember)
@@ -20,7 +20,17 @@ foreach($cards as $card) {
     $output = preg_replace('/\r{1,}/', ' ', $output);
     $output = preg_replace('/\s{1,}/', ' ', $output);
 
-    $field=array($card['idBoard'],$card['name'],$output,$points,$list,$card['badges']['checkItems'],$card['badges']['checkItemsChecked'],$asigned);
+    $field = array(
+      $card['idBoard'],
+      $card['name'],
+      $output,$points,
+      $list,
+      $card['badges']['checkItems'],
+      $card['badges']['checkItemsChecked'],
+      getItemsChecked($card['id'],$Key,$token),
+      getItemsUnChecked($card['id'],$Key,$token),
+      $asigned
+    );
     fputcsv($fp,$field);
 }
 

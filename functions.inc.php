@@ -44,16 +44,19 @@ function getCheckItemsState($idCard,$key,$token){
 function getItemsChecked($idCard,$key,$token)
 {
   $items = getCheckItemsPerCard($idCard,$key,$token);
-  $itemsOk='';
-  $CheckItemsState=getCheckItemsState($idCard,$key,$token);
-  foreach($items[0]['checkItems'] as $item)
+  $itemsOk = '';
+  $CheckItemsState = getCheckItemsState($idCard,$key,$token);
+  if( isset($items[0]) )
   {
-    foreach ($CheckItemsState as $CheckItemState)
+    foreach($items[0]['checkItems'] as $item)
     {
-        if($item['id']==$CheckItemState['idCheckItem'])
-        {
-          $itemsOk=$itemsOk.$item['name'].',';
-        }
+      foreach ($CheckItemsState as $CheckItemState)
+      {
+          if($item['id']==$CheckItemState['idCheckItem'])
+          {
+            $itemsOk=$itemsOk.$item['name'].'|';
+          }
+      }
     }
   }
   return $itemsOk;
@@ -63,11 +66,14 @@ function getItemsUnChecked($idCard,$key,$token){
   $items = getCheckItemsPerCard($idCard,$key,$token);
   $itemsOk='';
   $CheckItemsState=getCheckItemsState($idCard,$key,$token);
-  foreach($items[0]['checkItems'] as $item)
+  if(isset($items[0]))
   {
-    if(!isChecked($item,$CheckItemsState))
+    foreach($items[0]['checkItems'] as $item)
     {
-      $itemsOk=$itemsOk.$item['name'].',';
+      if(!isChecked($item,$CheckItemsState))
+      {
+        $itemsOk=$itemsOk.$item['name'].'|';
+      }
     }
   }
   return $itemsOk;
