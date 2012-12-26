@@ -7,9 +7,15 @@ $fp = fopen('reader.csv', 'w+');
 fputcsv($fp, array("Board", " Card name", "Card Description", "Card Points", "Status", "Checked Items Count", "UnChecked Items Count", "Checked Items", "UnChecked Items", "Asigned users"));
 foreach($cards as $card) {
     $asigned='';
+    $labels='';
     foreach ($card['idMembers'] as $idmember)
     {
         $asigned = $asigned.userName($idmember,$Key,$token);
+    }
+
+    foreach ($card['labels'] as $label)
+    {
+        $labels = $labels.$label['color'].','.$label['name'].'|';
     }
 
     $points=substr($card['name'],1,1);
@@ -29,7 +35,8 @@ foreach($cards as $card) {
       $card['badges']['checkItemsChecked'],
       getItemsChecked($card['id'],$Key,$token),
       getItemsUnChecked($card['id'],$Key,$token),
-      $asigned
+      $asigned,
+      $labels
     );
     fputcsv($fp,$field);
 }

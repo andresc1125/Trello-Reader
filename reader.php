@@ -37,6 +37,7 @@ include(__DIR__.'/init.inc.php');
           echo '<td>';echo "ItemsChecked";echo'</td>';
           echo '<td>';echo "unCheckedItems";echo'</td>';
           echo '<td>';echo "Asigned users";echo'</td>';
+          echo '<td>';echo "Labels as Color,name";echo'</td>';
           echo '</tr>';
           foreach($cards as $card) {
               echo '<tr>';
@@ -54,11 +55,18 @@ include(__DIR__.'/init.inc.php');
                   echo userName($idmember,$Key,$token).',';
               }
               echo '</td>';
+              echo '<td>';
+              $labels="";
+              foreach ($card['labels'] as $label) {
+                  $labels = $labels.$label['color'].','.$label['name'].'|';
+              }
+              echo $labels;
+              echo '</td>';
           }
           echo '</tr>';
           echo '</table>';
-          
-          
+
+
       ?>
     </div>
   </body>

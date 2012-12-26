@@ -41,6 +41,13 @@ function getCheckItemsState($idCard,$key,$token){
     return $checkItemStates['checkItemStates'];
 }
 
+function getLabels($idCard,$key,$token){
+  $url='https://api.trello.com/1/cards/'.$idCard.'?key='.$key.'&token='.$token.'&fields=labels';
+  $labels=api_request($url);
+  return $labels;
+}
+
+
 function getItemsChecked($idCard,$key,$token)
 {
   $items = getCheckItemsPerCard($idCard,$key,$token);
@@ -90,7 +97,6 @@ function isChecked($item,$CheckItemsState){
     }
   return $val;
 }
-
 
 function api_request($url) {
     $call = curl_init($url);
